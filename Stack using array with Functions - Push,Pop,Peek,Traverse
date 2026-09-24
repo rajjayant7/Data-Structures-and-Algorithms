@@ -1,0 +1,82 @@
+#include <stdio.h>
+
+#define SIZE 5
+
+void push();
+void pop();
+void peek();
+void traverse();
+
+int top = -1;
+int st[SIZE];
+
+int main()
+{
+    int i, n;
+    printf("Enter number of elements to push (max %d): ", SIZE);
+    scanf("%d", &n);
+    for(i = 0; i < n; i++)
+    {
+        push();
+    }
+    pop();
+    peek();
+    traverse();
+    return 0;
+}
+
+void push()
+{
+    int n;
+    if(top == SIZE - 1)
+    {
+        printf("Stack is full (Overflow)\n");
+    }
+    else
+    {
+        printf("Enter element: ");
+        scanf("%d", &n);
+        top = top + 1;
+        st[top] = n;
+    }
+}
+
+void pop()
+{
+    if(top == -1)
+    {
+        printf("Stack is already Empty (Underflow)\n");
+    }
+    else
+    {
+        printf("Deleted element = %d\n", st[top]);
+        top = top - 1;
+    }
+}
+
+void peek()
+{
+    if(top == -1)
+    {
+        printf("Stack is Empty\n");
+    }
+    else
+    {
+        printf("Top element = %d\n", st[top]);
+    }
+}
+
+void traverse()
+{
+    int i;
+    if(top == -1)
+    {
+        printf("Stack is Empty.\n");
+        return;
+    }
+    printf("Stack elements are:\n");
+    for(i = top; i >= 0; i--)
+    {
+        printf("%d\n", st[i]);
+    }
+}
