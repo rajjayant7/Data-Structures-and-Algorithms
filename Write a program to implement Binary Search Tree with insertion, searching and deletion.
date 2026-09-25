@@ -1,0 +1,129 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *left, *right;
+};
+
+struct Node* insert(struct Node *Root, int x)
+{
+    if (Root == NULL)
+    {
+        Root = malloc(sizeof(struct Node));
+        Root->data = x;
+        Root->left = Root->right = NULL;
+    }
+    else if (x < Root->data)
+        Root->left = insert(Root->left, x);
+    else if (x > Root->data)
+        Root->right = insert(Root->right, x);
+
+    return Root;
+}
+
+struct Node* search(struct Node *Root, int x)
+{
+    if (Root == NULL || Root->data == x)
+        return Root;
+
+    if (x < Root->data)
+        return search(Root->left, x);
+
+    return search(Root->right, x);
+}
+
+struct Node* minNode(struct Node *Root)
+{
+    while (Root->left != NULL)
+        Root = Root->left;
+
+    return Root;
+}
+
+struct Node* deleteNode(struct Node *Root, int x)
+{
+    struct Node *temp;
+
+    if (Root == NULL)
+        return NULL;
+
+    if (x < Root->data)
+        Root->left = deleteNode(Root->left, x);
+    else if (x > Root->data)
+        Root->right = deleteNode(Root->right, x);
+    else
+    {
+        if (Root->left == NULL)
+        {
+            temp = Root->right;
+            free(Root);
+            return temp;
+        }
+
+        if (Root->right == NULL)
+        {
+            temp = Root->left;
+            free(Root);
+            return temp;
+        }
+
+        temp = minNode(Root->right);
+        Root->data = temp->data;
+        Root->right = deleteNode(Root->right, temp->data);
+    }
+
+    return Root;
+}
+
+void inorder(struct Node *Root)
+{
+    if (Root != NULL)
+    {
+        inorder(Root->left);
+        printf("%d ", Root->data);
+        inorder(Root->right);
+    }
+}
+
+int main()
+{
+    struct Node *Root = NULL, *p;
+    int n, x, i;
+
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+
+    printf("Enter values: ");
+
+    for (i = 0; i < n; i++)
+    {
+        scanf("%d", &x);
+        Root = insert(Root, x);
+    }
+
+    printf("Inorder: ");
+    inorder(Root);
+
+    printf("\nSearch value: ");
+    scanf("%d", &x);
+
+    p = search(Root, x);
+
+    if (p != NULL)
+        printf("Found\n");
+    else
+        printf("Not Found\n");
+
+    printf("Delete value: ");
+    scanf("%d", &x);
+
+    Root = deleteNode(Root, x);
+
+    printf("After Deletion: ");
+    inorder(Root);
+
+    return 0;
+}
