@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    int priority;
+    struct Node *next;
+};
+
+struct Node *front = NULL;
+
+void enqueue()
+{
+    int value, p;
+    struct Node *newNode, *temp;
+
+    newNode = (struct Node *)malloc(sizeof(struct Node));
+
+    printf("Enter value: ");
+    scanf("%d", &value);
+
+    printf("Enter priority: ");
+    scanf("%d", &p);
+
+    newNode->data = value;
+    newNode->priority = p;
+    newNode->next = NULL;
+
+    if (front == NULL || p < front->priority)
+    {
+        newNode->next = front;
+        front = newNode;
+    }
+    else
+    {
+        temp = front;
+
+        while (temp->next != NULL &&
+               temp->next->priority <= p)
+        {
+            temp = temp->next;
+        }
+
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+
+    printf("Element inserted.\n");
+}
+
+void dequeue()
+{
+    struct Node *temp;
+
+    if (front == NULL)
+    {
+        printf("Queue Underflow\n");
+        return;
+    }
+
+    temp = front;
+    printf("Deleted element: %d\n", temp->data);
+
+    front = front->next;
+    free(temp);
+}
+
+void display()
+{
+    struct Node *temp = front;
+
+    if (front == NULL)
+    {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    printf("Value\tPriority\n");
+
+    while (temp != NULL)
+    {
+        printf("%d\t%d\n", temp->data, temp->priority);
+        temp = temp->next;
+    }
+}
+
+int main()
+{
+    int ch;
+
+    do
+    {
+        printf("\n1. Enqueue\n2. Dequeue\n3. Display\n4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &ch);
+
+        switch (ch)
+        {
+            case 1:
+                enqueue();
+                break;
+
+            case 2:
+                dequeue();
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                printf("Exit\n");
+                break;
+
+            default:
+                printf("Invalid choice\n");
+        }
+
+    } while (ch != 4);
+
+    return 0;
+}
