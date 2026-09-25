@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *create()
+{
+    int value;
+    struct Node *temp;
+
+    printf("Enter data (-1 for NULL): ");
+    scanf("%d", &value);
+
+    if (value == -1)
+        return NULL;
+
+    temp = (struct Node *)malloc(sizeof(struct Node));
+
+    temp->data = value;
+
+    printf("Left child of %d:\n", value);
+    temp->left = create();
+
+    printf("Right child of %d:\n", value);
+    temp->right = create();
+
+    return temp;
+}
+
+int totalNodes(struct Node *Root)
+{
+    if (Root == NULL)
+        return 0;
+
+    return 1 + totalNodes(Root->left)
+             + totalNodes(Root->right);
+}
+
+int leafNodes(struct Node *Root)
+{
+    if (Root == NULL)
+        return 0;
+
+    if (Root->left == NULL && Root->right == NULL)
+        return 1;
+
+    return leafNodes(Root->left)
+         + leafNodes(Root->right);
+}
+
+int height(struct Node *Root)
+{
+    int leftHeight, rightHeight;
+
+    if (Root == NULL)
+        return 0;
+
+    leftHeight = height(Root->left);
+    rightHeight = height(Root->right);
+
+    if (leftHeight > rightHeight)
+        return leftHeight + 1;
+    else
+        return rightHeight + 1;
+}
+
+int main()
+{
+    struct Node *Root;
+
+    printf("Create Binary Tree\n");
+    Root = create();
+
+    printf("\nTotal Nodes: %d", totalNodes(Root));
+    printf("\nLeaf Nodes: %d", leafNodes(Root));
+    printf("\nHeight: %d\n", height(Root));
+
+    return 0;
+}
