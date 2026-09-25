@@ -1,0 +1,156 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *link;
+};
+
+struct Node *Root = NULL;
+
+void insertFront()
+{
+    struct Node *temp;
+    int value;
+
+    temp = malloc(sizeof(struct Node));
+
+    printf("Enter value: ");
+    scanf("%d", &value);
+
+    temp->data = value;
+    temp->link = Root;
+    Root = temp;
+
+    printf("Inserted at Front\n");
+}
+
+void insertRear()
+{
+    struct Node *temp, *q;
+    int value;
+
+    temp = malloc(sizeof(struct Node));
+
+    printf("Enter value: ");
+    scanf("%d", &value);
+
+    temp->data = value;
+    temp->link = NULL;
+
+    if (Root == NULL)
+        Root = temp;
+    else
+    {
+        q = Root;
+
+        while (q->link != NULL)
+            q = q->link;
+
+        q->link = temp;
+    }
+
+    printf("Inserted at Rear\n");
+}
+
+void deleteFront()
+{
+    struct Node *temp;
+
+    if (Root == NULL)
+    {
+        printf("Underflow\n");
+        return;
+    }
+
+    temp = Root;
+    printf("Deleted: %d\n", temp->data);
+
+    Root = Root->link;
+    free(temp);
+}
+
+void deleteRear()
+{
+    struct Node *temp, *q;
+
+    if (Root == NULL)
+    {
+        printf("Underflow\n");
+        return;
+    }
+
+    if (Root->link == NULL)
+    {
+        printf("Deleted: %d\n", Root->data);
+        free(Root);
+        Root = NULL;
+        return;
+    }
+
+    q = Root;
+
+    while (q->link->link != NULL)
+        q = q->link;
+
+    temp = q->link;
+
+    printf("Deleted: %d\n", temp->data);
+
+    q->link = NULL;
+    free(temp);
+}
+
+void display()
+{
+    struct Node *q = Root;
+
+    if (Root == NULL)
+    {
+        printf("Deque is Empty\n");
+        return;
+    }
+
+    printf("Deque: ");
+
+    while (q != NULL)
+    {
+        printf("%d ", q->data);
+        q = q->link;
+    }
+
+    printf("\n");
+}
+
+int main()
+{
+    int choice;
+
+    while (1)
+    {
+        printf("\n1. Insert Front");
+        printf("\n2. Insert Rear");
+        printf("\n3. Delete Front");
+        printf("\n4. Delete Rear");
+        printf("\n5. Display");
+        printf("\n6. Exit");
+
+        printf("\nEnter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+            case 1: insertFront(); break;
+            case 2: insertRear(); break;
+            case 3: deleteFront(); break;
+            case 4: deleteRear(); break;
+            case 5: display(); break;
+            case 6: exit(0);
+            default: printf("Invalid Choice\n");
+        }
+    }
+
+    return 0;
+}
