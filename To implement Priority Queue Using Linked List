@@ -5,17 +5,17 @@ struct Node
 {
     int data;
     int priority;
-    struct Node *next;
+    struct Node *link;
 };
 
-struct Node *front = NULL;
+struct Node *Root = NULL;
 
 void enqueue()
 {
     int value, p;
-    struct Node *newNode, *temp;
+    struct Node *temp, *q;
 
-    newNode = (struct Node *)malloc(sizeof(struct Node));
+    temp = (struct Node *)malloc(sizeof(struct Node));
 
     printf("Enter value: ");
     scanf("%d", &value);
@@ -23,79 +23,86 @@ void enqueue()
     printf("Enter priority: ");
     scanf("%d", &p);
 
-    newNode->data = value;
-    newNode->priority = p;
-    newNode->next = NULL;
+    temp->data = value;
+    temp->priority = p;
 
-    if (front == NULL || p < front->priority)
+    if (Root == NULL || p < Root->priority)
     {
-        newNode->next = front;
-        front = newNode;
+        temp->link = Root;
+        Root = temp;
     }
     else
     {
-        temp = front;
+        q = Root;
 
-        while (temp->next != NULL &&
-               temp->next->priority <= p)
+        while (q->link != NULL &&
+               q->link->priority <= p)
         {
-            temp = temp->next;
+            q = q->link;
         }
 
-        newNode->next = temp->next;
-        temp->next = newNode;
+        temp->link = q->link;
+        q->link = temp;
     }
 
-    printf("Element inserted.\n");
+    printf("Element inserted\n");
 }
 
 void dequeue()
 {
     struct Node *temp;
 
-    if (front == NULL)
+    if (Root == NULL)
     {
         printf("Queue Underflow\n");
         return;
     }
 
-    temp = front;
-    printf("Deleted element: %d\n", temp->data);
+    temp = Root;
 
-    front = front->next;
+    printf("Deleted: %d\n", temp->data);
+
+    Root = Root->link;
+
     free(temp);
 }
 
 void display()
 {
-    struct Node *temp = front;
+    struct Node *q = Root;
 
-    if (front == NULL)
+    if (Root == NULL)
     {
         printf("Queue is empty\n");
         return;
     }
 
-    printf("Value\tPriority\n");
+    printf("\nPriority Queue:\n");
 
-    while (temp != NULL)
+    while (q != NULL)
     {
-        printf("%d\t%d\n", temp->data, temp->priority);
-        temp = temp->next;
+        printf("Value: %d  Priority: %d\n",
+               q->data, q->priority);
+
+        q = q->link;
     }
 }
 
 int main()
 {
-    int ch;
+    int choice;
 
-    do
+    while (1)
     {
-        printf("\n1. Enqueue\n2. Dequeue\n3. Display\n4. Exit\n");
-        printf("Enter choice: ");
-        scanf("%d", &ch);
+        printf("\n1. Enqueue");
+        printf("\n2. Dequeue");
+        printf("\n3. Display");
+        printf("\n4. Exit");
 
-        switch (ch)
+        printf("\nEnter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
         {
             case 1:
                 enqueue();
@@ -110,14 +117,12 @@ int main()
                 break;
 
             case 4:
-                printf("Exit\n");
-                break;
+                exit(0);
 
             default:
                 printf("Invalid choice\n");
         }
-
-    } while (ch != 4);
+    }
 
     return 0;
 }
