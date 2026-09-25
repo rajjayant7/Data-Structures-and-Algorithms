@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *create()
+{
+    int value;
+    struct Node *temp;
+
+    printf("Enter data (-1 for NULL): ");
+    scanf("%d", &value);
+
+    if (value == -1)
+        return NULL;
+
+    temp = (struct Node *)malloc(sizeof(struct Node));
+
+    temp->data = value;
+
+    printf("Left child of %d:\n", value);
+    temp->left = create();
+
+    printf("Right child of %d:\n", value);
+    temp->right = create();
+
+    return temp;
+}
+
+void preorder(struct Node *Root)
+{
+    if (Root == NULL)
+        return;
+
+    printf("%d ", Root->data);
+    preorder(Root->left);
+    preorder(Root->right);
+}
+
+void inorder(struct Node *Root)
+{
+    if (Root == NULL)
+        return;
+
+    inorder(Root->left);
+    printf("%d ", Root->data);
+    inorder(Root->right);
+}
+
+void postorder(struct Node *Root)
+{
+    if (Root == NULL)
+        return;
+
+    postorder(Root->left);
+    postorder(Root->right);
+    printf("%d ", Root->data);
+}
+
+int main()
+{
+    struct Node *Root;
+
+    printf("Create Binary Tree\n");
+    Root = create();
+
+    printf("\nPreorder: ");
+    preorder(Root);
+
+    printf("\nInorder: ");
+    inorder(Root);
+
+    printf("\nPostorder: ");
+    postorder(Root);
+
+    return 0;
+}
