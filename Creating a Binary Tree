@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *left, *right;
+};
+
+struct Node *create() {
+    int value;
+    struct Node *temp;
+    printf("Enter data (-1 for NULL): ");
+    scanf("%d", &value);
+    if (value == -1)
+        return NULL;
+    temp = (struct Node *)malloc(sizeof(struct Node));
+    temp->data = value;
+    printf("Left child of %d:\n", value);
+    temp->left = create();
+    printf("Right child of %d:\n", value);
+    temp->right = create();
+    return temp;
+}
+
+int main() {
+    struct Node *root;
+    printf("Create Binary Tree\n");
+    root = create();
+    printf("Binary Tree Created Successfully!");
+    return 0;
+}
